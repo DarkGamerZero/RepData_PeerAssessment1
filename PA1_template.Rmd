@@ -9,48 +9,48 @@ summary(activity)
 ```
 ## Q1. What is the mean total steps taken per day?
 1. Calculate the total number of steps taken pr day
-```{r Question 1-1}
+```{r Question1-1}
 stepsPerDay <- aggregate(steps ~ date, activity, sum, na.rm = TRUE)
 ```
 2. Make a histogram of the total number of steps per day
-```{r Question 1-2}
+```{r Question1-2}
 hist(stepsPerDay$steps, main = "Total number of steps per day", xlab = "Total steps taken per day")
 ```
 
 3. Calculate mean of the total steps per day
-```{r Question 1-3}
+```{r Question1-3}
 mean(stepsPerDay$steps)
 ```
 4. Calculate median of the total steps per day
-```{r Question 1-4}
+```{r Question1-4}
 median(stepsPerDay$steps)
 ```
 ## Q2. What is the average daily activity pattern?
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r Question 2-1}
+```{r Question2-1}
 stepsPerInterval <- aggregate(steps ~ interval, activity, mean, na.rm = TRUE)
 plot(steps ~ interval, data = stepsPerInterval, type = "l", main = "Avergage Steps taken per 5 minute interval", xlab = "Interval", ylab = "Average number of steps")
 ```
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r Question 2-2}
+```{r Question2-2}
 stepsPerInterval[which.max(stepsPerInterval$steps),]$interval
 ```
 ## Q3. Imputing missing values
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NA's)
-```{r Question 3-1}
+```{r Question3-1}
 sum(is.na(activity$steps))
 ```
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-```{r Question 3-2}
+```{r Question3-2}
 imputed_steps <- stepsPerInterval$steps[match(activity$interval, stepsPerInterval$interval)]
 ```
-3. Create a new database that is equal to the old databas but with the missing data filled in
-```{r Question 3-3}
+3. Create a new database that is equal to the old database but with the missing data filled in
+```{r Question3-3}
 activityNoNA <- transform(activity, steps = ifelse(is.na(activity$steps), yes = imputed_steps, no = activity$steps))
 stepsPerDayNoNA <- aggregate(steps ~ date, activityNoNA, sum)
 ```
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
-```{r Question 3-4}
+```{r Question3-4}
 hist(stepsPerDayNoNA$steps, main = "Total number of steps per day", xlab = "Total steps taken per day")
 print(paste0("Mean number of steps take per day: ", mean(stepsPerDayNoNA$steps)))
 print(paste0("Median number of steps take per day: ", median(stepsPerDayNoNA$steps)))
@@ -58,7 +58,7 @@ print(paste0("Median number of steps take per day: ", median(stepsPerDayNoNA$ste
 As we can see, the mean is unchanged while the median is now the same as the mean
 ## Q4. Are there differences in activity patterns between weekdays and weekends?
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
-```{r Question 4-1}
+```{r Question4-1}
 activityNoNA$date <- as.Date(strptime(activityNoNA$date, format="%Y-%m-%d"))
 activityNoNA$day <- weekdays(activityNoNA$date)
 for (i in 1:nrow(activityNoNA)) {
@@ -72,7 +72,7 @@ for (i in 1:nrow(activityNoNA)) {
 stepsByDay <- aggregate(activityNoNA$steps ~ activityNoNA$interval + activityNoNA$day, activityNoNA, mean)
 ```
 2. Make a panel plot containing a time series plot (i.e. 𝚝𝚢𝚙𝚎 = “𝚕”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
-```{r Question 4-2}
+```{r Question4-2}
 names(stepsByDay) <- c("interval", "day", "steps")
 library(lattice)
 xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2), 

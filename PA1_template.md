@@ -31,7 +31,7 @@ stepsPerDay <- aggregate(steps ~ date, activity, sum, na.rm = TRUE)
 hist(stepsPerDay$steps, main = "Total number of steps per day", xlab = "Total steps taken per day")
 ```
 
-![plot of chunk Question 1-2](figure/Question 1-2-1.png)
+![plot of chunk Question1-2](figure/Question1-2-1.png)
 
 3. Calculate mean of the total steps per day
 
@@ -59,7 +59,7 @@ stepsPerInterval <- aggregate(steps ~ interval, activity, mean, na.rm = TRUE)
 plot(steps ~ interval, data = stepsPerInterval, type = "l", main = "Avergage Steps taken per 5 minute interval", xlab = "Interval", ylab = "Average number of steps")
 ```
 
-![plot of chunk Question 2-1](figure/Question 2-1-1.png)
+![plot of chunk Question2-1](figure/Question2-1-1.png)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ```r
@@ -84,7 +84,7 @@ sum(is.na(activity$steps))
 ```r
 imputed_steps <- stepsPerInterval$steps[match(activity$interval, stepsPerInterval$interval)]
 ```
-3. Create a new database that is equal to the old databas but with the missing data filled in
+3. Create a new database that is equal to the old database but with the missing data filled in
 
 ```r
 activityNoNA <- transform(activity, steps = ifelse(is.na(activity$steps), yes = imputed_steps, no = activity$steps))
@@ -96,7 +96,7 @@ stepsPerDayNoNA <- aggregate(steps ~ date, activityNoNA, sum)
 hist(stepsPerDayNoNA$steps, main = "Total number of steps per day", xlab = "Total steps taken per day")
 ```
 
-![plot of chunk Question 3-4](figure/Question 3-4-1.png)
+![plot of chunk Question3-4](figure/Question3-4-1.png)
 
 ```r
 print(paste0("Mean number of steps take per day: ", mean(stepsPerDayNoNA$steps)))
@@ -139,5 +139,5 @@ xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2),
     xlab = "Interval", ylab = "Number of steps")
 ```
 
-![plot of chunk Question 4-2](figure/Question 4-2-1.png)
+![plot of chunk Question4-2](figure/Question4-2-1.png)
 
